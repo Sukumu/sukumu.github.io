@@ -26,5 +26,5 @@ _ = setTimeout(
     create_once_callable(
         lambda: clearInterval(interval_id)
     ),
-    10_000
+    10000
 )
