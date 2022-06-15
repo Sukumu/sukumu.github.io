@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PyScript Gravity Sensor</title>
+  <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+  <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+  <py-env>
+    - numpy
+  </py-env>
+</head>
+<body>
+  <span></span>
+  <script>
+    function addGravityListener(callback) {
+      if ("GravitySensor" in window) {
+        const sensor = new GravitySensor({frequency: 60})
+        sensor.addEventListener("reading",
+          () => callback(sensor.x, sensor.y, sensor.z)
+        )
+        sensor.start()
+      } else {
+        alert("Gravity sensor unavailable")
+      }
+    }
+  </script>
+  <py-title>PyScript Gravity Sensor</py-title>
+  <py-script src="/src/background.py"></py-script>
+  <py-script>
+import numpy as np
+from js import addGravityListener
+from pyodide import create_proxy
+
+span = document.querySelector("span")
+
+
+def callback(x: float, y: float, z: float) -> None:
+    span.innerText = orientation(x, y, z)
+
+
+def orientation(x: float, y: float, z: float) -> str:
+    gravity = np.array([x, y, z])
+    v = list(np.round(gravity / np.linalg.norm(gravity)).astype(int))
+    if v == [ 1,  0,  0]: return "Horizontal counterclockwise"
+    if v == [-1,  0,  0]: return "Horizontal clockwise"
+    if v == [ 0,  1,  0]: return "Vertical upright"
+    if v == [ 0, -1,  0]: return "Vertical upside down"
+    if v == [ 0,  0,  1]: return "Screen up"
+    if v == [ 0,  0, -1]: return "Screen down"
+    return "Tilted"
+
+
+addGravityListener(create_proxy(callback))
+  </py-script>
+</body>
+</html>

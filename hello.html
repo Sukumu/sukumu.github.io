@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello, World!</title>
+  <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+  <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+</head>
+<body>
+  <py-title>Hello, World!</py-title>
+  <py-script src="/src/background.py"></py-script>
+  <py-script>import pyodide_js; print(f'Pyodide {pyodide_js.version}')</py-script>
+  <py-script>import sys; print(f"Python {sys.version}")</py-script>
+  <py-script>print("Hello, World!")</py-script>
+</body>
+</html>

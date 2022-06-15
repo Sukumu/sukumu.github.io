@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DOM API in PyScript</title>
+  <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+  <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+  <style>
+    .crossed {
+      text-decoration: line-through;
+    }
+  </style>
+</head>
+<body>
+  <py-title>DOM API in PyScript</py-title>
+  <py-script src="/src/background.py"></py-script>
+  <div id="shopping-list">
+    <p>Shopping List</p>
+    <ul>
+      <li class="crossed">milk</li>
+      <li class="crossed">eggs</li>
+      <li>bread</li>
+    </ul>
+    <input id="new-item" type="text" placeholder="Add new item">
+    <button>Add</button>
+  </div>
+  <py-script>
+from pyodide import create_proxy
+
+def on_add_click(event):
+    input_new_item = document.querySelector("#new-item")
+
+    if input_new_item.value:
+        child = document.createElement("li")
+        child.innerText = input_new_item.value
+
+        parent = document.querySelector("#shopping-list ul")
+        parent.appendChild(child)
+
+        input_new_item.value = ""
+
+button = document.querySelector("button")
+button.addEventListener("click", create_proxy(on_add_click))
+  </py-script>
+</body>
+</html>
